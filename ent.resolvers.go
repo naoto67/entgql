@@ -14,12 +14,12 @@ import (
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id puuid.ID) (ent.Noder, error) {
-	return r.client.Noder(ctx, id)
+	return r.client.Noder(ctx, id, ent.WithNodeType(ent.IDToType))
 }
 
 // Nodes is the resolver for the nodes field.
 func (r *queryResolver) Nodes(ctx context.Context, ids []puuid.ID) ([]ent.Noder, error) {
-	return r.client.Noders(ctx, ids)
+	return r.client.Noders(ctx, ids, ent.WithNodeType(ent.IDToType))
 }
 
 // Todos is the resolver for the todos field.
