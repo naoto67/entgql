@@ -31,24 +31,22 @@ const (
 // TodoMutation represents an operation that mutates the Todo nodes in the graph.
 type TodoMutation struct {
 	config
-	op             Op
-	typ            string
-	id             *puuid.ID
-	created_at     *time.Time
-	status         *todo.Status
-	priority       *int
-	addpriority    *int
-	text           *string
-	blob           *[]byte
-	category_id    *int
-	addcategory_id *int
-	init           *map[string]interface{}
-	value          *int
-	addvalue       *int
-	clearedFields  map[string]struct{}
-	done           bool
-	oldValue       func(context.Context) (*Todo, error)
-	predicates     []predicate.Todo
+	op            Op
+	typ           string
+	id            *puuid.ID
+	created_at    *time.Time
+	status        *todo.Status
+	priority      *int
+	addpriority   *int
+	text          *string
+	blob          *[]byte
+	init          *map[string]interface{}
+	value         *int
+	addvalue      *int
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*Todo, error)
+	predicates    []predicate.Todo
 }
 
 var _ ent.Mutation = (*TodoMutation)(nil)
@@ -368,76 +366,6 @@ func (m *TodoMutation) ResetBlob() {
 	delete(m.clearedFields, todo.FieldBlob)
 }
 
-// SetCategoryID sets the "category_id" field.
-func (m *TodoMutation) SetCategoryID(i int) {
-	m.category_id = &i
-	m.addcategory_id = nil
-}
-
-// CategoryID returns the value of the "category_id" field in the mutation.
-func (m *TodoMutation) CategoryID() (r int, exists bool) {
-	v := m.category_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCategoryID returns the old "category_id" field's value of the Todo entity.
-// If the Todo object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TodoMutation) OldCategoryID(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCategoryID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCategoryID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCategoryID: %w", err)
-	}
-	return oldValue.CategoryID, nil
-}
-
-// AddCategoryID adds i to the "category_id" field.
-func (m *TodoMutation) AddCategoryID(i int) {
-	if m.addcategory_id != nil {
-		*m.addcategory_id += i
-	} else {
-		m.addcategory_id = &i
-	}
-}
-
-// AddedCategoryID returns the value that was added to the "category_id" field in this mutation.
-func (m *TodoMutation) AddedCategoryID() (r int, exists bool) {
-	v := m.addcategory_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearCategoryID clears the value of the "category_id" field.
-func (m *TodoMutation) ClearCategoryID() {
-	m.category_id = nil
-	m.addcategory_id = nil
-	m.clearedFields[todo.FieldCategoryID] = struct{}{}
-}
-
-// CategoryIDCleared returns if the "category_id" field was cleared in this mutation.
-func (m *TodoMutation) CategoryIDCleared() bool {
-	_, ok := m.clearedFields[todo.FieldCategoryID]
-	return ok
-}
-
-// ResetCategoryID resets all changes to the "category_id" field.
-func (m *TodoMutation) ResetCategoryID() {
-	m.category_id = nil
-	m.addcategory_id = nil
-	delete(m.clearedFields, todo.FieldCategoryID)
-}
-
 // SetInit sets the "init" field.
 func (m *TodoMutation) SetInit(value map[string]interface{}) {
 	m.init = &value
@@ -577,7 +505,7 @@ func (m *TodoMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TodoMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 7)
 	if m.created_at != nil {
 		fields = append(fields, todo.FieldCreatedAt)
 	}
@@ -592,9 +520,6 @@ func (m *TodoMutation) Fields() []string {
 	}
 	if m.blob != nil {
 		fields = append(fields, todo.FieldBlob)
-	}
-	if m.category_id != nil {
-		fields = append(fields, todo.FieldCategoryID)
 	}
 	if m.init != nil {
 		fields = append(fields, todo.FieldInit)
@@ -620,8 +545,6 @@ func (m *TodoMutation) Field(name string) (ent.Value, bool) {
 		return m.Text()
 	case todo.FieldBlob:
 		return m.Blob()
-	case todo.FieldCategoryID:
-		return m.CategoryID()
 	case todo.FieldInit:
 		return m.Init()
 	case todo.FieldValue:
@@ -645,8 +568,6 @@ func (m *TodoMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldText(ctx)
 	case todo.FieldBlob:
 		return m.OldBlob(ctx)
-	case todo.FieldCategoryID:
-		return m.OldCategoryID(ctx)
 	case todo.FieldInit:
 		return m.OldInit(ctx)
 	case todo.FieldValue:
@@ -695,13 +616,6 @@ func (m *TodoMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetBlob(v)
 		return nil
-	case todo.FieldCategoryID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCategoryID(v)
-		return nil
 	case todo.FieldInit:
 		v, ok := value.(map[string]interface{})
 		if !ok {
@@ -727,9 +641,6 @@ func (m *TodoMutation) AddedFields() []string {
 	if m.addpriority != nil {
 		fields = append(fields, todo.FieldPriority)
 	}
-	if m.addcategory_id != nil {
-		fields = append(fields, todo.FieldCategoryID)
-	}
 	if m.addvalue != nil {
 		fields = append(fields, todo.FieldValue)
 	}
@@ -743,8 +654,6 @@ func (m *TodoMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case todo.FieldPriority:
 		return m.AddedPriority()
-	case todo.FieldCategoryID:
-		return m.AddedCategoryID()
 	case todo.FieldValue:
 		return m.AddedValue()
 	}
@@ -763,13 +672,6 @@ func (m *TodoMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddPriority(v)
 		return nil
-	case todo.FieldCategoryID:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddCategoryID(v)
-		return nil
 	case todo.FieldValue:
 		v, ok := value.(int)
 		if !ok {
@@ -787,9 +689,6 @@ func (m *TodoMutation) ClearedFields() []string {
 	var fields []string
 	if m.FieldCleared(todo.FieldBlob) {
 		fields = append(fields, todo.FieldBlob)
-	}
-	if m.FieldCleared(todo.FieldCategoryID) {
-		fields = append(fields, todo.FieldCategoryID)
 	}
 	if m.FieldCleared(todo.FieldInit) {
 		fields = append(fields, todo.FieldInit)
@@ -810,9 +709,6 @@ func (m *TodoMutation) ClearField(name string) error {
 	switch name {
 	case todo.FieldBlob:
 		m.ClearBlob()
-		return nil
-	case todo.FieldCategoryID:
-		m.ClearCategoryID()
 		return nil
 	case todo.FieldInit:
 		m.ClearInit()
@@ -839,9 +735,6 @@ func (m *TodoMutation) ResetField(name string) error {
 		return nil
 	case todo.FieldBlob:
 		m.ResetBlob()
-		return nil
-	case todo.FieldCategoryID:
-		m.ResetCategoryID()
 		return nil
 	case todo.FieldInit:
 		m.ResetInit()

@@ -27,8 +27,6 @@ const (
 	FieldText = "text"
 	// FieldBlob holds the string denoting the blob field in the database.
 	FieldBlob = "blob"
-	// FieldCategoryID holds the string denoting the category_id field in the database.
-	FieldCategoryID = "category_id"
 	// FieldInit holds the string denoting the init field in the database.
 	FieldInit = "init"
 	// FieldValue holds the string denoting the value field in the database.
@@ -45,7 +43,6 @@ var Columns = []string{
 	FieldPriority,
 	FieldText,
 	FieldBlob,
-	FieldCategoryID,
 	FieldInit,
 	FieldValue,
 }
@@ -123,11 +120,6 @@ func ByPriority(opts ...sql.OrderTermOption) OrderOption {
 // ByText orders the results by the text field.
 func ByText(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldText, opts...).ToFunc()
-}
-
-// ByCategoryID orders the results by the category_id field.
-func ByCategoryID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCategoryID, opts...).ToFunc()
 }
 
 // ByValue orders the results by the value field.

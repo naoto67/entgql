@@ -16,7 +16,6 @@ var (
 		{Name: "priority", Type: field.TypeInt, Default: 0},
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
 		{Name: "blob", Type: field.TypeBytes, Nullable: true},
-		{Name: "category_id", Type: field.TypeInt, Nullable: true},
 		{Name: "init", Type: field.TypeJSON, Nullable: true},
 		{Name: "value", Type: field.TypeInt, Default: 0},
 	}

@@ -198,9 +198,6 @@ func (tu *TodoUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if tu.mutation.BlobCleared() {
 		_spec.ClearField(todo.FieldBlob, field.TypeBytes)
 	}
-	if tu.mutation.CategoryIDCleared() {
-		_spec.ClearField(todo.FieldCategoryID, field.TypeInt)
-	}
 	if value, ok := tu.mutation.Init(); ok {
 		_spec.SetField(todo.FieldInit, field.TypeJSON, value)
 	}
@@ -433,9 +430,6 @@ func (tuo *TodoUpdateOne) sqlSave(ctx context.Context) (_node *Todo, err error) 
 	}
 	if tuo.mutation.BlobCleared() {
 		_spec.ClearField(todo.FieldBlob, field.TypeBytes)
-	}
-	if tuo.mutation.CategoryIDCleared() {
-		_spec.ClearField(todo.FieldCategoryID, field.TypeInt)
 	}
 	if value, ok := tuo.mutation.Init(); ok {
 		_spec.SetField(todo.FieldInit, field.TypeJSON, value)

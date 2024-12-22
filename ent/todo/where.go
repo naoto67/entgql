@@ -75,11 +75,6 @@ func Blob(v []byte) predicate.Todo {
 	return predicate.Todo(sql.FieldEQ(FieldBlob, v))
 }
 
-// CategoryID applies equality check predicate on the "category_id" field. It's identical to CategoryIDEQ.
-func CategoryID(v int) predicate.Todo {
-	return predicate.Todo(sql.FieldEQ(FieldCategoryID, v))
-}
-
 // Value applies equality check predicate on the "value" field. It's identical to ValueEQ.
 func Value(v int) predicate.Todo {
 	return predicate.Todo(sql.FieldEQ(FieldValue, v))
@@ -298,56 +293,6 @@ func BlobIsNil() predicate.Todo {
 // BlobNotNil applies the NotNil predicate on the "blob" field.
 func BlobNotNil() predicate.Todo {
 	return predicate.Todo(sql.FieldNotNull(FieldBlob))
-}
-
-// CategoryIDEQ applies the EQ predicate on the "category_id" field.
-func CategoryIDEQ(v int) predicate.Todo {
-	return predicate.Todo(sql.FieldEQ(FieldCategoryID, v))
-}
-
-// CategoryIDNEQ applies the NEQ predicate on the "category_id" field.
-func CategoryIDNEQ(v int) predicate.Todo {
-	return predicate.Todo(sql.FieldNEQ(FieldCategoryID, v))
-}
-
-// CategoryIDIn applies the In predicate on the "category_id" field.
-func CategoryIDIn(vs ...int) predicate.Todo {
-	return predicate.Todo(sql.FieldIn(FieldCategoryID, vs...))
-}
-
-// CategoryIDNotIn applies the NotIn predicate on the "category_id" field.
-func CategoryIDNotIn(vs ...int) predicate.Todo {
-	return predicate.Todo(sql.FieldNotIn(FieldCategoryID, vs...))
-}
-
-// CategoryIDGT applies the GT predicate on the "category_id" field.
-func CategoryIDGT(v int) predicate.Todo {
-	return predicate.Todo(sql.FieldGT(FieldCategoryID, v))
-}
-
-// CategoryIDGTE applies the GTE predicate on the "category_id" field.
-func CategoryIDGTE(v int) predicate.Todo {
-	return predicate.Todo(sql.FieldGTE(FieldCategoryID, v))
-}
-
-// CategoryIDLT applies the LT predicate on the "category_id" field.
-func CategoryIDLT(v int) predicate.Todo {
-	return predicate.Todo(sql.FieldLT(FieldCategoryID, v))
-}
-
-// CategoryIDLTE applies the LTE predicate on the "category_id" field.
-func CategoryIDLTE(v int) predicate.Todo {
-	return predicate.Todo(sql.FieldLTE(FieldCategoryID, v))
-}
-
-// CategoryIDIsNil applies the IsNil predicate on the "category_id" field.
-func CategoryIDIsNil() predicate.Todo {
-	return predicate.Todo(sql.FieldIsNull(FieldCategoryID))
-}
-
-// CategoryIDNotNil applies the NotNil predicate on the "category_id" field.
-func CategoryIDNotNil() predicate.Todo {
-	return predicate.Todo(sql.FieldNotNull(FieldCategoryID))
 }
 
 // InitIsNil applies the IsNil predicate on the "init" field.

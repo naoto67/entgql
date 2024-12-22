@@ -51,11 +51,6 @@ func (t *TodoQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, todo.FieldText)
 				fieldSeen[todo.FieldText] = struct{}{}
 			}
-		case "categoryID", "category_id", "categoryX":
-			if _, ok := fieldSeen[todo.FieldCategoryID]; !ok {
-				selectedFields = append(selectedFields, todo.FieldCategoryID)
-				fieldSeen[todo.FieldCategoryID] = struct{}{}
-			}
 		case "init":
 			if _, ok := fieldSeen[todo.FieldInit]; !ok {
 				selectedFields = append(selectedFields, todo.FieldInit)
@@ -128,6 +123,9 @@ func newTodoPaginateArgs(rv map[string]any) *todoPaginateArgs {
 			}
 			args.opts = append(args.opts, WithTodoOrder(orders))
 		}
+	}
+	if v, ok := rv[whereField].(*TodoWhereInput); ok {
+		args.opts = append(args.opts, WithTodoFilter(v.Filter))
 	}
 	return args
 }

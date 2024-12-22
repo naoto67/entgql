@@ -8,12 +8,11 @@ import (
 
 // CreateTodoInput represents a mutation input for creating todos.
 type CreateTodoInput struct {
-	Status     todo.Status
-	Priority   *int
-	Text       string
-	CategoryID *int
-	Init       map[string]interface{}
-	Value      *int
+	Status   todo.Status
+	Priority *int
+	Text     string
+	Init     map[string]interface{}
+	Value    *int
 }
 
 // Mutate applies the CreateTodoInput on the TodoMutation builder.
@@ -23,9 +22,6 @@ func (i *CreateTodoInput) Mutate(m *TodoMutation) {
 		m.SetPriority(*v)
 	}
 	m.SetText(i.Text)
-	if v := i.CategoryID; v != nil {
-		m.SetCategoryID(*v)
-	}
 	if v := i.Init; v != nil {
 		m.SetInit(v)
 	}

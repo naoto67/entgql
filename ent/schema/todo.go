@@ -49,12 +49,6 @@ func (Todo) Fields() []ent.Field {
 				entgql.Skip(),
 			).
 			Optional(),
-		field.Int("category_id").
-			Optional().
-			Immutable().
-			Annotations(
-				entgql.MapsTo("categoryID", "category_id", "categoryX"),
-			),
 		field.JSON("init", map[string]any{}).
 			Optional().
 			Annotations(entgql.Type("Map")),

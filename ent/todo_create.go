@@ -67,20 +67,6 @@ func (tc *TodoCreate) SetBlob(b []byte) *TodoCreate {
 	return tc
 }
 
-// SetCategoryID sets the "category_id" field.
-func (tc *TodoCreate) SetCategoryID(i int) *TodoCreate {
-	tc.mutation.SetCategoryID(i)
-	return tc
-}
-
-// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
-func (tc *TodoCreate) SetNillableCategoryID(i *int) *TodoCreate {
-	if i != nil {
-		tc.SetCategoryID(*i)
-	}
-	return tc
-}
-
 // SetInit sets the "init" field.
 func (tc *TodoCreate) SetInit(m map[string]interface{}) *TodoCreate {
 	tc.mutation.SetInit(m)
@@ -249,10 +235,6 @@ func (tc *TodoCreate) createSpec() (*Todo, *sqlgraph.CreateSpec) {
 	if value, ok := tc.mutation.Blob(); ok {
 		_spec.SetField(todo.FieldBlob, field.TypeBytes, value)
 		_node.Blob = value
-	}
-	if value, ok := tc.mutation.CategoryID(); ok {
-		_spec.SetField(todo.FieldCategoryID, field.TypeInt, value)
-		_node.CategoryID = value
 	}
 	if value, ok := tc.mutation.Init(); ok {
 		_spec.SetField(todo.FieldInit, field.TypeJSON, value)

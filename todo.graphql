@@ -1,13 +1,5 @@
-scalar Cursor
-scalar Time
-scalar Map
-
 extend input TodoWhereInput {
   createdToday: Boolean
-}
-
-extend type Todo {
-  extendedField: String
 }
 
 extend type Query {
@@ -15,41 +7,6 @@ extend type Query {
   This field is an example of extending the built-in Query type from Ent.
   """
   ping: String!
-
-  """
-  This is the todo item
-  """
-  todosWithJoins(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Todos returned from the connection.
-    """
-    orderBy: [TodoOrder!]
-
-    """
-    Filtering options for Todos returned from the connection.
-    """
-    where: TodoWhereInput
-  ): TodoConnection!
 }
 
 type Mutation {
@@ -57,42 +14,5 @@ type Mutation {
   clearTodos: Int!
 }
 
-input CreateTodoInput {
-  status: TodoStatus!
-  priority: Int
-  text: String!
-  init: Map
-  value: Int
-  parentID: ID
-  childIDs: [ID!]
-}
-
-type PageInfo {
-  """
-  When paginating forwards, are there more items?
-  """
-  hasNextPage: Boolean!
-  """
-  When paginating backwards, are there more items?
-  """
-  hasPreviousPage: Boolean!
-  """
-  When paginating backwards, the cursor to continue.
-  """
-  startCursor: Cursor
-  """
-  When paginating forwards, the cursor to continue.
-  """
-  endCursor: Cursor
-}
-
-enum OrderDirection {
-  """
-  Specifies an ascending order for a given `orderBy` argument.
-  """
-  ASC
-  """
-  Specifies a descending order for a given `orderBy` argument.
-  """
-  DESC
-}
+scalar Map
+scalar Time

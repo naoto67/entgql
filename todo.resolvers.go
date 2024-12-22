@@ -8,10 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"entgo.io/contrib/entgql"
-	"github.com/google/uuid"
 	"github.com/naoto67/entgql/ent"
-	"github.com/naoto67/entgql/ent/schema/puuid"
 )
 
 // CreateTodo is the resolver for the createTodo field.
@@ -24,43 +21,20 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input ent.CreateTodoI
 
 // ClearTodos is the resolver for the clearTodos field.
 func (r *mutationResolver) ClearTodos(ctx context.Context) (int, error) {
-	panic(fmt.Errorf("not implemented: ClearTodos - clearTodos"))
+	return ent.FromContext(ctx).Todo.Delete().Exec(ctx)
 }
 
 // Ping is the resolver for the ping field.
 func (r *queryResolver) Ping(ctx context.Context) (string, error) {
-	panic(fmt.Errorf("not implemented: Ping - ping"))
+	return "pong", nil
 }
 
-// TodosWithJoins is the resolver for the todosWithJoins field.
-func (r *queryResolver) TodosWithJoins(ctx context.Context, after *entgql.Cursor[puuid.ID], first *int, before *entgql.Cursor[puuid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) (*ent.TodoConnection, error) {
-	panic(fmt.Errorf("not implemented: TodosWithJoins - todosWithJoins"))
-}
-
-// ExtendedField is the resolver for the extendedField field.
-func (r *todoResolver) ExtendedField(ctx context.Context, obj *ent.Todo) (*string, error) {
-	panic(fmt.Errorf("not implemented: ExtendedField - extendedField"))
-}
-
-// ParentID is the resolver for the parentID field.
-func (r *createTodoInputResolver) ParentID(ctx context.Context, obj *ent.CreateTodoInput, data *uuid.UUID) error {
-	panic(fmt.Errorf("not implemented: ParentID - parentID"))
-}
-
-// ChildIDs is the resolver for the childIDs field.
-func (r *createTodoInputResolver) ChildIDs(ctx context.Context, obj *ent.CreateTodoInput, data []uuid.UUID) error {
-	panic(fmt.Errorf("not implemented: ChildIDs - childIDs"))
+// CreatedToday is the resolver for the createdToday field.
+func (r *todoWhereInputResolver) CreatedToday(ctx context.Context, obj *ent.TodoWhereInput, data *bool) error {
+	panic(fmt.Errorf("not implemented: CreatedToday - createdToday"))
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
-// Query returns QueryResolver implementation.
-func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
-
-// CreateTodoInput returns CreateTodoInputResolver implementation.
-func (r *Resolver) CreateTodoInput() CreateTodoInputResolver { return &createTodoInputResolver{r} }
-
 type mutationResolver struct{ *Resolver }
-type queryResolver struct{ *Resolver }
-type createTodoInputResolver struct{ *Resolver }
