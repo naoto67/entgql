@@ -9,12 +9,13 @@ import (
 	"fmt"
 
 	"entgo.io/contrib/entgql"
+	"github.com/google/uuid"
 	"github.com/naoto67/entgql/ent"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 )
 
 // ID is the resolver for the id field.
-func (r *todoResolver) ID(ctx context.Context, obj *ent.Todo) (int, error) {
+func (r *todoResolver) ID(ctx context.Context, obj *ent.Todo) (uuid.UUID, error) {
 	panic(fmt.Errorf("not implemented: ID - id"))
 }
 
@@ -24,7 +25,7 @@ func (r *todoResolver) Parent(ctx context.Context, obj *ent.Todo) (*ent.Todo, er
 }
 
 // Children is the resolver for the children field.
-func (r *todoResolver) Children(ctx context.Context, obj *ent.Todo, after *entgql.Cursor[pulid.ID], first *int, before *entgql.Cursor[pulid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) (*ent.TodoConnection, error) {
+func (r *todoResolver) Children(ctx context.Context, obj *ent.Todo, after *entgql.Cursor[puuid.ID], first *int, before *entgql.Cursor[puuid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) (*ent.TodoConnection, error) {
 	panic(fmt.Errorf("not implemented: Children - children"))
 }
 

@@ -5,6 +5,7 @@ package entgql
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/naoto67/entgql/ent/todo"
 )
 
@@ -15,14 +16,14 @@ type TodoWhereInput struct {
 	And []*TodoWhereInput `json:"and,omitempty"`
 	Or  []*TodoWhereInput `json:"or,omitempty"`
 	// id field predicates
-	ID      *int  `json:"id,omitempty"`
-	IDNeq   *int  `json:"idNEQ,omitempty"`
-	IDIn    []int `json:"idIn,omitempty"`
-	IDNotIn []int `json:"idNotIn,omitempty"`
-	IDGt    *int  `json:"idGT,omitempty"`
-	IDGte   *int  `json:"idGTE,omitempty"`
-	IDLt    *int  `json:"idLT,omitempty"`
-	IDLte   *int  `json:"idLTE,omitempty"`
+	ID      *uuid.UUID  `json:"id,omitempty"`
+	IDNeq   *uuid.UUID  `json:"idNEQ,omitempty"`
+	IDIn    []uuid.UUID `json:"idIn,omitempty"`
+	IDNotIn []uuid.UUID `json:"idNotIn,omitempty"`
+	IDGt    *uuid.UUID  `json:"idGT,omitempty"`
+	IDGte   *uuid.UUID  `json:"idGTE,omitempty"`
+	IDLt    *uuid.UUID  `json:"idLT,omitempty"`
+	IDLte   *uuid.UUID  `json:"idLTE,omitempty"`
 	// created_at field predicates
 	CreatedAt      *time.Time   `json:"createdAt,omitempty"`
 	CreatedAtNeq   *time.Time   `json:"createdAtNEQ,omitempty"`

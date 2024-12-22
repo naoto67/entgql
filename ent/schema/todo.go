@@ -7,7 +7,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 )
 
 type Todo struct {
@@ -76,6 +76,6 @@ func (Todo) Annotations() []schema.Annotation {
 func (Todo) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		// "TD" declared once.
-		pulid.MixinWithPrefix("TD"),
+		puuid.MixinWithPrefix("TD"),
 	}
 }

@@ -10,7 +10,7 @@ import (
 	"reflect"
 
 	"github.com/naoto67/entgql/ent/migrate"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -258,7 +258,7 @@ func (c *TodoClient) UpdateOne(t *Todo) *TodoUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *TodoClient) UpdateOneID(id pulid.ID) *TodoUpdateOne {
+func (c *TodoClient) UpdateOneID(id puuid.ID) *TodoUpdateOne {
 	mutation := newTodoMutation(c.config, OpUpdateOne, withTodoID(id))
 	return &TodoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -275,7 +275,7 @@ func (c *TodoClient) DeleteOne(t *Todo) *TodoDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *TodoClient) DeleteOneID(id pulid.ID) *TodoDeleteOne {
+func (c *TodoClient) DeleteOneID(id puuid.ID) *TodoDeleteOne {
 	builder := c.Delete().Where(todo.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -292,12 +292,12 @@ func (c *TodoClient) Query() *TodoQuery {
 }
 
 // Get returns a Todo entity by its id.
-func (c *TodoClient) Get(ctx context.Context, id pulid.ID) (*Todo, error) {
+func (c *TodoClient) Get(ctx context.Context, id puuid.ID) (*Todo, error) {
 	return c.Query().Where(todo.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *TodoClient) GetX(ctx context.Context, id pulid.ID) *Todo {
+func (c *TodoClient) GetX(ctx context.Context, id puuid.ID) *Todo {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

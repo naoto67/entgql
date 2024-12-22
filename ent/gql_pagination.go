@@ -14,15 +14,15 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/errcode"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 	"github.com/naoto67/entgql/ent/todo"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 // Common entgql types.
 type (
-	Cursor         = entgql.Cursor[pulid.ID]
-	PageInfo       = entgql.PageInfo[pulid.ID]
+	Cursor         = entgql.Cursor[puuid.ID]
+	PageInfo       = entgql.PageInfo[puuid.ID]
 	OrderDirection = entgql.OrderDirection
 )
 

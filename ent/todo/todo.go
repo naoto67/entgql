@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 )
 
 const (
@@ -70,7 +70,7 @@ var (
 	// DefaultValue holds the default value on creation for the "value" field.
 	DefaultValue int
 	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() pulid.ID
+	DefaultID func() puuid.ID
 )
 
 // Status defines the type for the "status" enum field.

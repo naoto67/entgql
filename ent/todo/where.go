@@ -7,51 +7,51 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/naoto67/entgql/ent/predicate"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id pulid.ID) predicate.Todo {
+func ID(id puuid.ID) predicate.Todo {
 	return predicate.Todo(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id pulid.ID) predicate.Todo {
+func IDEQ(id puuid.ID) predicate.Todo {
 	return predicate.Todo(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id pulid.ID) predicate.Todo {
+func IDNEQ(id puuid.ID) predicate.Todo {
 	return predicate.Todo(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...pulid.ID) predicate.Todo {
+func IDIn(ids ...puuid.ID) predicate.Todo {
 	return predicate.Todo(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...pulid.ID) predicate.Todo {
+func IDNotIn(ids ...puuid.ID) predicate.Todo {
 	return predicate.Todo(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id pulid.ID) predicate.Todo {
+func IDGT(id puuid.ID) predicate.Todo {
 	return predicate.Todo(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id pulid.ID) predicate.Todo {
+func IDGTE(id puuid.ID) predicate.Todo {
 	return predicate.Todo(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id pulid.ID) predicate.Todo {
+func IDLT(id puuid.ID) predicate.Todo {
 	return predicate.Todo(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id pulid.ID) predicate.Todo {
+func IDLTE(id puuid.ID) predicate.Todo {
 	return predicate.Todo(sql.FieldLTE(FieldID, id))
 }
 

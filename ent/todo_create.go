@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 	"github.com/naoto67/entgql/ent/todo"
 )
 
@@ -102,13 +102,13 @@ func (tc *TodoCreate) SetNillableValue(i *int) *TodoCreate {
 }
 
 // SetID sets the "id" field.
-func (tc *TodoCreate) SetID(pu pulid.ID) *TodoCreate {
+func (tc *TodoCreate) SetID(pu puuid.ID) *TodoCreate {
 	tc.mutation.SetID(pu)
 	return tc
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tc *TodoCreate) SetNillableID(pu *pulid.ID) *TodoCreate {
+func (tc *TodoCreate) SetNillableID(pu *puuid.ID) *TodoCreate {
 	if pu != nil {
 		tc.SetID(*pu)
 	}
@@ -210,7 +210,7 @@ func (tc *TodoCreate) sqlSave(ctx context.Context) (*Todo, error) {
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		if id, ok := _spec.ID.Value.(*pulid.ID); ok {
+		if id, ok := _spec.ID.Value.(*puuid.ID); ok {
 			_node.ID = *id
 		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
 			return nil, err

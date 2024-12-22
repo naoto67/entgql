@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 	"github.com/naoto67/entgql/ent/todo"
 )
 
@@ -18,7 +18,7 @@ import (
 type Todo struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID pulid.ID `json:"id,omitempty"`
+	ID puuid.ID `json:"id,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// Status holds the value of the "status" field.
@@ -46,7 +46,7 @@ func (*Todo) scanValues(columns []string) ([]any, error) {
 		case todo.FieldBlob, todo.FieldInit:
 			values[i] = new([]byte)
 		case todo.FieldID:
-			values[i] = new(pulid.ID)
+			values[i] = new(puuid.ID)
 		case todo.FieldPriority, todo.FieldCategoryID, todo.FieldValue:
 			values[i] = new(sql.NullInt64)
 		case todo.FieldStatus, todo.FieldText:
@@ -69,7 +69,7 @@ func (t *Todo) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case todo.FieldID:
-			if value, ok := values[i].(*pulid.ID); !ok {
+			if value, ok := values[i].(*puuid.ID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				t.ID = *value

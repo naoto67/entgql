@@ -1,31 +1,20 @@
-package pulid
+package puuid
 
 import (
-	"crypto/rand"
 	"database/sql/driver"
 	"fmt"
 	"io"
 	"strconv"
-	"time"
 
-	"github.com/oklog/ulid/v2"
+	"github.com/google/uuid"
 )
 
 // ID implements a PULID - a prefixed ULID.
 type ID string
 
-// The default entropy source.
-var defaultEntropySource *ulid.MonotonicEntropy
-
-func init() {
-	// Seed the default entropy source.
-	// TODO: To improve testability, this package should allow control of entropy sources and the time.Now implementation.
-	defaultEntropySource = ulid.Monotonic(rand.Reader, 0)
-}
-
 // newULID returns a new ULID for time.Now() using the default entropy source.
-func newULID() ulid.ULID {
-	return ulid.MustNew(ulid.Timestamp(time.Now()), defaultEntropySource)
+func newULID() uuid.UUID {
+	return uuid.Must(uuid.NewRandom())
 }
 
 // MustNew returns a new PULID for time.Now() given a prefix. This uses the default entropy source.

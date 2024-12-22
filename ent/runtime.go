@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/naoto67/entgql/ent/schema"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 	"github.com/naoto67/entgql/ent/todo"
 )
 
@@ -38,5 +38,5 @@ func init() {
 	// todoDescID is the schema descriptor for id field.
 	todoDescID := todoMixinFields0[0].Descriptor()
 	// todo.DefaultID holds the default value on creation for the id field.
-	todo.DefaultID = todoDescID.Default.(func() pulid.ID)
+	todo.DefaultID = todoDescID.Default.(func() puuid.ID)
 }

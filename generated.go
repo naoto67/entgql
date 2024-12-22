@@ -16,8 +16,9 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/google/uuid"
 	"github.com/naoto67/entgql/ent"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 	"github.com/naoto67/entgql/ent/todo"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -67,11 +68,11 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Ping           func(childComplexity int) int
-		TodosWithJoins func(childComplexity int, after *entgql.Cursor[pulid.ID], first *int, before *entgql.Cursor[pulid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) int
+		TodosWithJoins func(childComplexity int, after *entgql.Cursor[puuid.ID], first *int, before *entgql.Cursor[puuid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) int
 	}
 
 	Todo struct {
-		Children      func(childComplexity int, after *entgql.Cursor[pulid.ID], first *int, before *entgql.Cursor[pulid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) int
+		Children      func(childComplexity int, after *entgql.Cursor[puuid.ID], first *int, before *entgql.Cursor[puuid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) int
 		CreatedAt     func(childComplexity int) int
 		ExtendedField func(childComplexity int) int
 		ID            func(childComplexity int) int
@@ -101,19 +102,19 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Ping(ctx context.Context) (string, error)
-	TodosWithJoins(ctx context.Context, after *entgql.Cursor[pulid.ID], first *int, before *entgql.Cursor[pulid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) (*ent.TodoConnection, error)
+	TodosWithJoins(ctx context.Context, after *entgql.Cursor[puuid.ID], first *int, before *entgql.Cursor[puuid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) (*ent.TodoConnection, error)
 }
 type TodoResolver interface {
-	ID(ctx context.Context, obj *ent.Todo) (int, error)
+	ID(ctx context.Context, obj *ent.Todo) (uuid.UUID, error)
 
 	Parent(ctx context.Context, obj *ent.Todo) (*ent.Todo, error)
-	Children(ctx context.Context, obj *ent.Todo, after *entgql.Cursor[pulid.ID], first *int, before *entgql.Cursor[pulid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) (*ent.TodoConnection, error)
+	Children(ctx context.Context, obj *ent.Todo, after *entgql.Cursor[puuid.ID], first *int, before *entgql.Cursor[puuid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) (*ent.TodoConnection, error)
 	ExtendedField(ctx context.Context, obj *ent.Todo) (*string, error)
 }
 
 type CreateTodoInputResolver interface {
-	ParentID(ctx context.Context, obj *ent.CreateTodoInput, data *int) error
-	ChildIDs(ctx context.Context, obj *ent.CreateTodoInput, data []int) error
+	ParentID(ctx context.Context, obj *ent.CreateTodoInput, data *uuid.UUID) error
+	ChildIDs(ctx context.Context, obj *ent.CreateTodoInput, data []uuid.UUID) error
 }
 
 type executableSchema struct {
@@ -199,7 +200,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.TodosWithJoins(childComplexity, args["after"].(*entgql.Cursor[pulid.ID]), args["first"].(*int), args["before"].(*entgql.Cursor[pulid.ID]), args["last"].(*int), args["orderBy"].([]*ent.TodoOrder), args["where"].(*TodoWhereInput)), true
+		return e.complexity.Query.TodosWithJoins(childComplexity, args["after"].(*entgql.Cursor[puuid.ID]), args["first"].(*int), args["before"].(*entgql.Cursor[puuid.ID]), args["last"].(*int), args["orderBy"].([]*ent.TodoOrder), args["where"].(*TodoWhereInput)), true
 
 	case "Todo.children":
 		if e.complexity.Todo.Children == nil {
@@ -211,7 +212,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Todo.Children(childComplexity, args["after"].(*entgql.Cursor[pulid.ID]), args["first"].(*int), args["before"].(*entgql.Cursor[pulid.ID]), args["last"].(*int), args["orderBy"].([]*ent.TodoOrder), args["where"].(*TodoWhereInput)), true
+		return e.complexity.Todo.Children(childComplexity, args["after"].(*entgql.Cursor[puuid.ID]), args["first"].(*int), args["before"].(*entgql.Cursor[puuid.ID]), args["last"].(*int), args["orderBy"].([]*ent.TodoOrder), args["where"].(*TodoWhereInput)), true
 
 	case "Todo.createdAt":
 		if e.complexity.Todo.CreatedAt == nil {
@@ -541,13 +542,13 @@ func (ec *executionContext) field_Query_todosWithJoins_args(ctx context.Context,
 func (ec *executionContext) field_Query_todosWithJoins_argsAfter(
 	ctx context.Context,
 	rawArgs map[string]any,
-) (*entgql.Cursor[pulid.ID], error) {
+) (*entgql.Cursor[puuid.ID], error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
 	// even if the argument is null.
 	_, ok := rawArgs["after"]
 	if !ok {
-		var zeroVal *entgql.Cursor[pulid.ID]
+		var zeroVal *entgql.Cursor[puuid.ID]
 		return zeroVal, nil
 	}
 
@@ -556,7 +557,7 @@ func (ec *executionContext) field_Query_todosWithJoins_argsAfter(
 		return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
 	}
 
-	var zeroVal *entgql.Cursor[pulid.ID]
+	var zeroVal *entgql.Cursor[puuid.ID]
 	return zeroVal, nil
 }
 
@@ -585,13 +586,13 @@ func (ec *executionContext) field_Query_todosWithJoins_argsFirst(
 func (ec *executionContext) field_Query_todosWithJoins_argsBefore(
 	ctx context.Context,
 	rawArgs map[string]any,
-) (*entgql.Cursor[pulid.ID], error) {
+) (*entgql.Cursor[puuid.ID], error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
 	// even if the argument is null.
 	_, ok := rawArgs["before"]
 	if !ok {
-		var zeroVal *entgql.Cursor[pulid.ID]
+		var zeroVal *entgql.Cursor[puuid.ID]
 		return zeroVal, nil
 	}
 
@@ -600,7 +601,7 @@ func (ec *executionContext) field_Query_todosWithJoins_argsBefore(
 		return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
 	}
 
-	var zeroVal *entgql.Cursor[pulid.ID]
+	var zeroVal *entgql.Cursor[puuid.ID]
 	return zeroVal, nil
 }
 
@@ -708,13 +709,13 @@ func (ec *executionContext) field_Todo_children_args(ctx context.Context, rawArg
 func (ec *executionContext) field_Todo_children_argsAfter(
 	ctx context.Context,
 	rawArgs map[string]any,
-) (*entgql.Cursor[pulid.ID], error) {
+) (*entgql.Cursor[puuid.ID], error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
 	// even if the argument is null.
 	_, ok := rawArgs["after"]
 	if !ok {
-		var zeroVal *entgql.Cursor[pulid.ID]
+		var zeroVal *entgql.Cursor[puuid.ID]
 		return zeroVal, nil
 	}
 
@@ -723,7 +724,7 @@ func (ec *executionContext) field_Todo_children_argsAfter(
 		return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
 	}
 
-	var zeroVal *entgql.Cursor[pulid.ID]
+	var zeroVal *entgql.Cursor[puuid.ID]
 	return zeroVal, nil
 }
 
@@ -752,13 +753,13 @@ func (ec *executionContext) field_Todo_children_argsFirst(
 func (ec *executionContext) field_Todo_children_argsBefore(
 	ctx context.Context,
 	rawArgs map[string]any,
-) (*entgql.Cursor[pulid.ID], error) {
+) (*entgql.Cursor[puuid.ID], error) {
 	// We won't call the directive if the argument is null.
 	// Set call_argument_directives_with_null to true to call directives
 	// even if the argument is null.
 	_, ok := rawArgs["before"]
 	if !ok {
-		var zeroVal *entgql.Cursor[pulid.ID]
+		var zeroVal *entgql.Cursor[puuid.ID]
 		return zeroVal, nil
 	}
 
@@ -767,7 +768,7 @@ func (ec *executionContext) field_Todo_children_argsBefore(
 		return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, tmp)
 	}
 
-	var zeroVal *entgql.Cursor[pulid.ID]
+	var zeroVal *entgql.Cursor[puuid.ID]
 	return zeroVal, nil
 }
 
@@ -1030,7 +1031,7 @@ func (ec *executionContext) fieldContext_Mutation_clearTodos(_ context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *entgql.PageInfo[pulid.ID]) (ret graphql.Marshaler) {
+func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *entgql.PageInfo[puuid.ID]) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageInfo_hasNextPage(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1074,7 +1075,7 @@ func (ec *executionContext) fieldContext_PageInfo_hasNextPage(_ context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _PageInfo_hasPreviousPage(ctx context.Context, field graphql.CollectedField, obj *entgql.PageInfo[pulid.ID]) (ret graphql.Marshaler) {
+func (ec *executionContext) _PageInfo_hasPreviousPage(ctx context.Context, field graphql.CollectedField, obj *entgql.PageInfo[puuid.ID]) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1118,7 +1119,7 @@ func (ec *executionContext) fieldContext_PageInfo_hasPreviousPage(_ context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _PageInfo_startCursor(ctx context.Context, field graphql.CollectedField, obj *entgql.PageInfo[pulid.ID]) (ret graphql.Marshaler) {
+func (ec *executionContext) _PageInfo_startCursor(ctx context.Context, field graphql.CollectedField, obj *entgql.PageInfo[puuid.ID]) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageInfo_startCursor(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1141,7 +1142,7 @@ func (ec *executionContext) _PageInfo_startCursor(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*entgql.Cursor[pulid.ID])
+	res := resTmp.(*entgql.Cursor[puuid.ID])
 	fc.Result = res
 	return ec.marshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, field.Selections, res)
 }
@@ -1159,7 +1160,7 @@ func (ec *executionContext) fieldContext_PageInfo_startCursor(_ context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graphql.CollectedField, obj *entgql.PageInfo[pulid.ID]) (ret graphql.Marshaler) {
+func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graphql.CollectedField, obj *entgql.PageInfo[puuid.ID]) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PageInfo_endCursor(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1182,7 +1183,7 @@ func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*entgql.Cursor[pulid.ID])
+	res := resTmp.(*entgql.Cursor[puuid.ID])
 	fc.Result = res
 	return ec.marshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, field.Selections, res)
 }
@@ -1258,7 +1259,7 @@ func (ec *executionContext) _Query_todosWithJoins(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().TodosWithJoins(rctx, fc.Args["after"].(*entgql.Cursor[pulid.ID]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[pulid.ID]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.TodoOrder), fc.Args["where"].(*TodoWhereInput))
+		return ec.resolvers.Query().TodosWithJoins(rctx, fc.Args["after"].(*entgql.Cursor[puuid.ID]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[puuid.ID]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.TodoOrder), fc.Args["where"].(*TodoWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1462,9 +1463,9 @@ func (ec *executionContext) _Todo_id(ctx context.Context, field graphql.Collecte
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int)
+	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2int(ctx, field.Selections, res)
+	return ec.marshalNID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Todo_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1818,7 +1819,7 @@ func (ec *executionContext) _Todo_children(ctx context.Context, field graphql.Co
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Todo().Children(rctx, obj, fc.Args["after"].(*entgql.Cursor[pulid.ID]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[pulid.ID]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.TodoOrder), fc.Args["where"].(*TodoWhereInput))
+		return ec.resolvers.Todo().Children(rctx, obj, fc.Args["after"].(*entgql.Cursor[puuid.ID]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[puuid.ID]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*ent.TodoOrder), fc.Args["where"].(*TodoWhereInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1981,7 +1982,7 @@ func (ec *executionContext) _TodoConnection_pageInfo(ctx context.Context, field 
 		}
 		return graphql.Null
 	}
-	res := resTmp.(entgql.PageInfo[pulid.ID])
+	res := resTmp.(entgql.PageInfo[puuid.ID])
 	fc.Result = res
 	return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, field.Selections, res)
 }
@@ -2142,7 +2143,7 @@ func (ec *executionContext) _TodoEdge_cursor(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(entgql.Cursor[pulid.ID])
+	res := resTmp.(entgql.Cursor[puuid.ID])
 	fc.Result = res
 	return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, field.Selections, res)
 }
@@ -3984,7 +3985,7 @@ func (ec *executionContext) unmarshalInputCreateTodoInput(ctx context.Context, o
 			it.Value = data
 		case "parentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("parentID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalOID2ᚖgithubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -3993,7 +3994,7 @@ func (ec *executionContext) unmarshalInputCreateTodoInput(ctx context.Context, o
 			}
 		case "childIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("childIDs"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			data, err := ec.unmarshalOID2ᚕgithubᚗcomᚋgoogleᚋuuidᚐUUIDᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4081,56 +4082,56 @@ func (ec *executionContext) unmarshalInputTodoWhereInput(ctx context.Context, ob
 			it.Or = data
 		case "id":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalOID2ᚖgithubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ID = data
 		case "idNEQ":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalOID2ᚖgithubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.IDNeq = data
 		case "idIn":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			data, err := ec.unmarshalOID2ᚕgithubᚗcomᚋgoogleᚋuuidᚐUUIDᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.IDIn = data
 		case "idNotIn":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
-			data, err := ec.unmarshalOID2ᚕintᚄ(ctx, v)
+			data, err := ec.unmarshalOID2ᚕgithubᚗcomᚋgoogleᚋuuidᚐUUIDᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.IDNotIn = data
 		case "idGT":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGT"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalOID2ᚖgithubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.IDGt = data
 		case "idGTE":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idGTE"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalOID2ᚖgithubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.IDGte = data
 		case "idLT":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLT"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalOID2ᚖgithubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.IDLt = data
 		case "idLTE":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idLTE"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			data, err := ec.unmarshalOID2ᚖgithubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4543,7 +4544,7 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 var pageInfoImplementors = []string{"PageInfo"}
 
-func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet, obj *entgql.PageInfo[pulid.ID]) graphql.Marshaler {
+func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet, obj *entgql.PageInfo[puuid.ID]) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, pageInfoImplementors)
 
 	out := graphql.NewFieldSet(fields)
@@ -5315,23 +5316,23 @@ func (ec *executionContext) unmarshalNCreateTodoInput2githubᚗcomᚋnaoto67ᚋe
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, v any) (entgql.Cursor[pulid.ID], error) {
-	var res entgql.Cursor[pulid.ID]
+func (ec *executionContext) unmarshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, v any) (entgql.Cursor[puuid.ID], error) {
+	var res entgql.Cursor[puuid.ID]
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, sel ast.SelectionSet, v entgql.Cursor[pulid.ID]) graphql.Marshaler {
+func (ec *executionContext) marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, sel ast.SelectionSet, v entgql.Cursor[puuid.ID]) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNID2int(ctx context.Context, v any) (int, error) {
-	res, err := graphql.UnmarshalIntID(v)
+func (ec *executionContext) unmarshalNID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx context.Context, v any) (uuid.UUID, error) {
+	res, err := graphql.UnmarshalUUID(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNID2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
-	res := graphql.MarshalIntID(v)
+func (ec *executionContext) marshalNID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
+	res := graphql.MarshalUUID(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -5365,7 +5366,7 @@ func (ec *executionContext) marshalNOrderDirection2entgoᚗioᚋcontribᚋentgql
 	return v
 }
 
-func (ec *executionContext) marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v entgql.PageInfo[pulid.ID]) graphql.Marshaler {
+func (ec *executionContext) marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v entgql.PageInfo[puuid.ID]) graphql.Marshaler {
 	return ec._PageInfo(ctx, sel, &v)
 }
 
@@ -5763,23 +5764,23 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, v any) (*entgql.Cursor[pulid.ID], error) {
+func (ec *executionContext) unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, v any) (*entgql.Cursor[puuid.ID], error) {
 	if v == nil {
 		return nil, nil
 	}
-	var res = new(entgql.Cursor[pulid.ID])
+	var res = new(entgql.Cursor[puuid.ID])
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, sel ast.SelectionSet, v *entgql.Cursor[pulid.ID]) graphql.Marshaler {
+func (ec *executionContext) marshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, sel ast.SelectionSet, v *entgql.Cursor[puuid.ID]) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOID2ᚕintᚄ(ctx context.Context, v any) ([]int, error) {
+func (ec *executionContext) unmarshalOID2ᚕgithubᚗcomᚋgoogleᚋuuidᚐUUIDᚄ(ctx context.Context, v any) ([]uuid.UUID, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -5788,10 +5789,10 @@ func (ec *executionContext) unmarshalOID2ᚕintᚄ(ctx context.Context, v any) (
 		vSlice = graphql.CoerceList(v)
 	}
 	var err error
-	res := make([]int, len(vSlice))
+	res := make([]uuid.UUID, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNID2int(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -5799,13 +5800,13 @@ func (ec *executionContext) unmarshalOID2ᚕintᚄ(ctx context.Context, v any) (
 	return res, nil
 }
 
-func (ec *executionContext) marshalOID2ᚕintᚄ(ctx context.Context, sel ast.SelectionSet, v []int) graphql.Marshaler {
+func (ec *executionContext) marshalOID2ᚕgithubᚗcomᚋgoogleᚋuuidᚐUUIDᚄ(ctx context.Context, sel ast.SelectionSet, v []uuid.UUID) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNID2int(ctx, sel, v[i])
+		ret[i] = ec.marshalNID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {
@@ -5817,19 +5818,19 @@ func (ec *executionContext) marshalOID2ᚕintᚄ(ctx context.Context, sel ast.Se
 	return ret
 }
 
-func (ec *executionContext) unmarshalOID2ᚖint(ctx context.Context, v any) (*int, error) {
+func (ec *executionContext) unmarshalOID2ᚖgithubᚗcomᚋgoogleᚋuuidᚐUUID(ctx context.Context, v any) (*uuid.UUID, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := graphql.UnmarshalIntID(v)
+	res, err := graphql.UnmarshalUUID(v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOID2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+func (ec *executionContext) marshalOID2ᚖgithubᚗcomᚋgoogleᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v *uuid.UUID) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	res := graphql.MarshalIntID(*v)
+	res := graphql.MarshalUUID(*v)
 	return res
 }
 

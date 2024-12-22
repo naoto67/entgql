@@ -15,7 +15,7 @@ omit_getters: true
 models:
   ID:
     model:
-      - github.com/99designs/gqlgen/graphql.IntID
+      - github.com/99designs/gqlgen/graphql.UUID
   Map:
     model:
       - github.com/99designs/gqlgen/graphql.Map

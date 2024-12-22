@@ -9,8 +9,9 @@ import (
 	"fmt"
 
 	"entgo.io/contrib/entgql"
+	"github.com/google/uuid"
 	"github.com/naoto67/entgql/ent"
-	"github.com/naoto67/entgql/ent/schema/pulid"
+	"github.com/naoto67/entgql/ent/schema/puuid"
 )
 
 // CreateTodo is the resolver for the createTodo field.
@@ -32,7 +33,7 @@ func (r *queryResolver) Ping(ctx context.Context) (string, error) {
 }
 
 // TodosWithJoins is the resolver for the todosWithJoins field.
-func (r *queryResolver) TodosWithJoins(ctx context.Context, after *entgql.Cursor[pulid.ID], first *int, before *entgql.Cursor[pulid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) (*ent.TodoConnection, error) {
+func (r *queryResolver) TodosWithJoins(ctx context.Context, after *entgql.Cursor[puuid.ID], first *int, before *entgql.Cursor[puuid.ID], last *int, orderBy []*ent.TodoOrder, where *TodoWhereInput) (*ent.TodoConnection, error) {
 	panic(fmt.Errorf("not implemented: TodosWithJoins - todosWithJoins"))
 }
 
@@ -42,12 +43,12 @@ func (r *todoResolver) ExtendedField(ctx context.Context, obj *ent.Todo) (*strin
 }
 
 // ParentID is the resolver for the parentID field.
-func (r *createTodoInputResolver) ParentID(ctx context.Context, obj *ent.CreateTodoInput, data *int) error {
+func (r *createTodoInputResolver) ParentID(ctx context.Context, obj *ent.CreateTodoInput, data *uuid.UUID) error {
 	panic(fmt.Errorf("not implemented: ParentID - parentID"))
 }
 
 // ChildIDs is the resolver for the childIDs field.
-func (r *createTodoInputResolver) ChildIDs(ctx context.Context, obj *ent.CreateTodoInput, data []int) error {
+func (r *createTodoInputResolver) ChildIDs(ctx context.Context, obj *ent.CreateTodoInput, data []uuid.UUID) error {
 	panic(fmt.Errorf("not implemented: ChildIDs - childIDs"))
 }
 

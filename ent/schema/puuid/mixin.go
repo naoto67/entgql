@@ -1,4 +1,4 @@
-package pulid
+package puuid
 
 import (
 	"entgo.io/ent"
