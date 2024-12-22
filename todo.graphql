@@ -65,8 +65,6 @@ input CreateTodoInput {
   value: Int
   parentID: ID
   childIDs: [ID!]
-  categoryID: ID
-  secretID: ID
 }
 
 type PageInfo {

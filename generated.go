@@ -114,8 +114,6 @@ type TodoResolver interface {
 type CreateTodoInputResolver interface {
 	ParentID(ctx context.Context, obj *ent.CreateTodoInput, data *int) error
 	ChildIDs(ctx context.Context, obj *ent.CreateTodoInput, data []int) error
-
-	SecretID(ctx context.Context, obj *ent.CreateTodoInput, data *int) error
 }
 
 type executableSchema struct {
@@ -3942,7 +3940,7 @@ func (ec *executionContext) unmarshalInputCreateTodoInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"status", "priority", "text", "init", "value", "parentID", "childIDs", "categoryID", "secretID"}
+	fieldsInOrder := [...]string{"status", "priority", "text", "init", "value", "parentID", "childIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -4000,22 +3998,6 @@ func (ec *executionContext) unmarshalInputCreateTodoInput(ctx context.Context, o
 				return it, err
 			}
 			if err = ec.resolvers.CreateTodoInput().ChildIDs(ctx, &it, data); err != nil {
-				return it, err
-			}
-		case "categoryID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryID = data
-		case "secretID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secretID"))
-			data, err := ec.unmarshalOID2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			if err = ec.resolvers.CreateTodoInput().SecretID(ctx, &it, data); err != nil {
 				return it, err
 			}
 		}

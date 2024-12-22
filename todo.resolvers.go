@@ -51,11 +51,6 @@ func (r *createTodoInputResolver) ChildIDs(ctx context.Context, obj *ent.CreateT
 	panic(fmt.Errorf("not implemented: ChildIDs - childIDs"))
 }
 
-// SecretID is the resolver for the secretID field.
-func (r *createTodoInputResolver) SecretID(ctx context.Context, obj *ent.CreateTodoInput, data *int) error {
-	panic(fmt.Errorf("not implemented: SecretID - secretID"))
-}
-
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
