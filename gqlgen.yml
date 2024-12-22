@@ -1,0 +1,24 @@
+schema:
+  - todo.graphql
+  - ent.graphql
+
+resolver:
+  layout: follow-schema
+  dir: .
+
+autobind:
+  - github.com/naoto67/entgql/ent
+  - github.com/naoto67/entgql/ent/todo
+
+# Disable the generated getters for all models and interfaces.
+omit_getters: true
+models:
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.IntID
+  Map:
+    model:
+      - github.com/99designs/gqlgen/graphql.Map
+  Node:
+    model:
+      - github.com/naoto67/entgql/ent.Noder
