@@ -1,6 +1,5 @@
 schema:
-  - todo.graphql
-  - ent.graphql
+  - ./*.graphql
 
 resolver:
   layout: follow-schema

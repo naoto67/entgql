@@ -13,16 +13,16 @@ import (
 
 func main() {
 	ex, err := entgql.NewExtension(
-		entgql.WithConfigPath("./../gqlgen.yml"),
+		entgql.WithConfigPath("./gqlgen.yml"),
 		entgql.WithSchemaGenerator(),
-		entgql.WithSchemaPath("./../ent.graphql"),
+		entgql.WithSchemaPath("./ent_gen.graphql"),
 		entgql.WithWhereInputs(true),
 		entgql.WithNodeDescriptor(true),
 	)
 	if err != nil {
 		log.Fatalf("creating entgql extension: %v", err)
 	}
-	if err := entc.Generate("./schema", &gen.Config{}, entc.Extensions(ex)); err != nil {
+	if err := entc.Generate("./ent/schema", &gen.Config{}, entc.Extensions(ex)); err != nil {
 		log.Fatalf("running ent codegen: %v", err)
 	}
 }
