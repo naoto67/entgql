@@ -34,7 +34,7 @@ type Annotation struct {
 
 // Name implements the ent Annotation interface.
 func (a Annotation) Name() string {
-	return "PULID"
+	return "PUUID"
 }
 
 // Annotations returns the annotations for a Mixin instance.
