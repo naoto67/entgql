@@ -9,16 +9,16 @@ import (
 	"github.com/google/uuid"
 )
 
-// ID implements a PULID - a prefixed ULID.
+// ID implements a PUUID - a prefixed UUID.
 type ID string
 
-// newULID returns a new ULID for time.Now() using the default entropy source.
-func newULID() uuid.UUID {
+// newUUID returns a new UUID for time.Now() using the default entropy source.
+func newUUID() uuid.UUID {
 	return uuid.Must(uuid.NewRandom())
 }
 
-// MustNew returns a new PULID for time.Now() given a prefix. This uses the default entropy source.
-func MustNew(prefix string) ID { return ID(prefix + fmt.Sprint(newULID())) }
+// MustNew returns a new PUUID for time.Now() given a prefix. This uses the default entropy source.
+func MustNew(prefix string) ID { return ID(prefix + fmt.Sprint(newUUID())) }
 
 // UnmarshalGQL implements the graphql.Unmarshaler interface
 func (u *ID) UnmarshalGQL(v interface{}) error {
@@ -33,7 +33,7 @@ func (u ID) MarshalGQL(w io.Writer) {
 // Scan implements the Scanner interface.
 func (u *ID) Scan(src interface{}) error {
 	if src == nil {
-		return fmt.Errorf("pulid: expected a value")
+		return fmt.Errorf("puuid: expected a value")
 	}
 	switch src := src.(type) {
 	case string:
@@ -41,7 +41,7 @@ func (u *ID) Scan(src interface{}) error {
 	case ID:
 		*u = src
 	default:
-		return fmt.Errorf("pulid: unexpected type, %T", src)
+		return fmt.Errorf("puuid: unexpected type, %T", src)
 	}
 	return nil
 }
